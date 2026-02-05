@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>steak dinner</title>
+  <style>
+    :root{
+      --bg1:#fff1f6;
+      --bg2:#ffe4ef;
+      --card:#ffffffcc;
+      --text:#1f2937;
+      --pink:#ff4d8d;
+      --pink2:#ff77a8;
+      --shadow: 0 12px 40px rgba(31,41,55,.15);
+    }
+    *{ box-sizing:border-box; }
+    html, body { height: 100%; }
+    body{
+      margin:0;
+      min-height:100svh; /* better on mobile than 100vh */
+      display:grid;
+      place-items:center;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background: radial-gradient(1200px 600px at 20% 10%, var(--bg2), transparent 60%),
+                  radial-gradient(900px 500px at 80% 30%, #ffeef6, transparent 55%),
+                  linear-gradient(135deg, var(--bg1), #fff);
+      overflow-x:hidden;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .hearts{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.30;
+      filter: blur(.2px);
+    }
+    .heart{
+      position:absolute;
+      font-size: clamp(14px, 2.2vw, 22px);
+      animation: floatUp linear infinite;
+      transform: translateY(110svh);
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(110svh) translateX(0); }
+      to{ transform: translateY(-20svh) translateX(40px); }
+    }
+
+    .card{
+      width: min(720px, 94vw);
+      padding: clamp(18px, 4vw, 40px);
+      border-radius: 28px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,.6);
+      position: relative;
+    }
+
+    h1{
+      margin:0 0 6px;
+      font-size: clamp(22px, 5.2vw, 40px);
+      letter-spacing:-.02em;
+      text-align:center;
+      line-height: 1.05;
+    }
+    p{
+      margin:0 0 14px;
+      text-align:center;
+      font-size: clamp(14px, 3.8vw, 18px);
+      opacity:.85;
+    }
+
+    /* 📸 Photos: responsive, wraps cleanly on iPhone */
+    .photos{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      margin: 6px auto 18px;
+      width:100%;
+      flex-wrap: wrap; /* always allow wrap */
+    }
+    .photos img{
+      width: min(210px, 28vw);
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 12px 26px rgba(255,77,141,.20);
+      border: 1px solid rgba(255,255,255,.7);
+      display:block;
+    }
+    @media (max-width: 560px){
+      .photos img{
+        width: 30vw;       /* 3 across on many phones */
+        min-width: 98px;   /* but never too tiny */
+      }
+    }
+
+    /* Button area: responsive height */
+    .playground{
+      position:relative;
+      height: clamp(190px, 30vh, 240px);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.35));
+      border: 1px dashed rgba(255,77,141,.35);
+      overflow:hidden;
+      touch-action: manipulation; /* nicer taps on mobile */
+    }
+
+    /* ✅ iPhone-friendly tap targets */
+    .btn{
+      border:0;
+      padding: 12px 18px;           /* slightly bigger for thumbs */
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor:pointer;
+      user-select:none;
+      position:absolute;
+      min-width: 110px;
+      min-height: 44px;             /* Apple's recommended tap size */
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .btn:active{ transform: translateY(1px) scale(.99); }
+
+    #yesBtn{
+      left: 28%;
+      top: 58%;
+      transform: translate(-50%,-50%);
+      background: linear-gradient(135deg, var(--pink), var(--pink2));
+      color:white;
+      box-shadow: 0 8px 18px rgba(255,77,141,.30);
+    }
+    #yesBtn:hover{ filter: brightness(1.05); }
+
+    #noBtn{
+      left: 72%;
+      top: 58%;
+      transform: translate(-50%,-50%);
+      background: rgba(31,41,55,.08);
+      color: #111827;
+      box-shadow: 0 8px 14px rgba(31,41,55,.10);
+      border: 1px solid rgba(31,41,55,.10);
+    }
+    #noBtn:hover{ filter: brightness(1.02); }
+
+    .result{
+      margin-top: 14px;
+      text-align:center;
+      font-size: clamp(16px, 4.3vw, 20px);
+      font-weight: 800;
+      min-height: 30px;
+    }
+    .small{
+      margin-top:10px;
+      text-align:center;
+      font-size: 12px;
+      opacity:.75;
+    }
+    .small a{
+      color:#ff4d8d;
+      font-weight:700;
+      text-decoration:none;
+    }
+    .small a:hover{ text-decoration: underline; }
+
+    .sparkle{
+      display:inline-block;
+      animation: pop .6s ease;
+    }
+    @keyframes pop{
+      0%{ transform: scale(.7); opacity:0; }
+      100%{ transform: scale(1); opacity:1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hearts" id="hearts"></div>
+
+  <div class="card">
+    <h1>hi baby,</h1>
+    <h1>will you be my valentine?</h1>
+    <p>💖💖💖💖💖💖</p>
+
+<div class="photos" aria-label="three photos">
+  <img src="https://i.imgur.com/tcEiOyX.jpeg" alt="photo 1">
+  <img src="https://i.imgur.com/FHdXyYE.jpeg" alt="photo 2">
+  <img src="https://i.imgur.com/CBh0k1J.jpeg" alt="photo 3">
+</div>
+
+
+    <div class="playground" id="playground" aria-label="button area">
+      <button class="btn" id="yesBtn">Yes 💖</button>
+      <button class="btn" id="noBtn">No 🙃</button>
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <!-- 🎶 Hyperlink -->
+    <div class="small">
+      <a href="https://www.youtube.com/watch?v=mgaeGW-2z6w" target="_blank" rel="noopener noreferrer">
+        *insert sexy love by neyo*
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Floating hearts background
+    const heartsWrap = document.getElementById("hearts");
+    const heartEmojis = ["💗","💘","💞","💖","💝","💓","💟"];
+    for (let i = 0; i < 22; i++){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+      h.style.left = Math.random()*100 + "vw";
+      h.style.animationDuration = (6 + Math.random()*8) + "s";
+      h.style.animationDelay = (-Math.random()*10) + "s";
+      h.style.opacity = (0.25 + Math.random()*0.55).toFixed(2);
+      heartsWrap.appendChild(h);
+    }
+
+    const playground = document.getElementById("playground");
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
+    const result = document.getElementById("result");
+
+    // iPhone-friendly "No" movement: use pointer events + touch fallback
+    function moveNoButtonAwayFrom(x, y) {
+      const box = playground.getBoundingClientRect();
+      const btn = noBtn.getBoundingClientRect();
+
+      const cx = (btn.left - box.left) + btn.width / 2;
+      const cy = (btn.top  - box.top)  + btn.height / 2;
+
+      let dx = cx - x;
+      let dy = cy - y;
+
+      if (Math.abs(dx) < 0.01 && Math.abs(dy) < 0.01) {
+        dx = (Math.random() - 0.5);
+        dy = (Math.random() - 0.5);
+      }
+
+      const mag = Math.hypot(dx, dy) || 1;
+      dx /= mag; dy /= mag;
+
+      const shove = 120;
+      let newX = cx + dx * shove;
+      let newY = cy + dy * shove;
+
+      const pad = 16;
+      const minX = pad + btn.width / 2;
+      const maxX = box.width - pad - btn.width / 2;
+      const minY = pad + btn.height / 2;
+      const maxY = box.height - pad - btn.height / 2;
+
+      newX = Math.max(minX, Math.min(maxX, newX));
+      newY = Math.max(minY, Math.min(maxY, newY));
+
+      noBtn.style.left = newX + "px";
+      noBtn.style.top  = newY + "px";
+      noBtn.style.transform = "translate(-50%,-50%)";
+    }
+
+    function handleMove(clientX, clientY){
+      const box = playground.getBoundingClientRect();
+      const x = clientX - box.left;
+      const y = clientY - box.top;
+
+      const btn = noBtn.getBoundingClientRect();
+      const bx = (btn.left - box.left) + btn.width / 2;
+      const by = (btn.top  - box.top)  + btn.height / 2;
+
+      const dist = Math.hypot(x - bx, y - by);
+      if (dist < 105) moveNoButtonAwayFrom(x, y);
+    }
+
+    // Start with pixel positioning so moves are smooth
+    function initNoButtonPixelPosition(){
+      const box = playground.getBoundingClientRect();
+      noBtn.style.left = (box.width * 0.72) + "px";
+      noBtn.style.top  = (box.height * 0.58) + "px";
+      noBtn.style.transform = "translate(-50%,-50%)";
+    }
+    window.addEventListener("load", initNoButtonPixelPosition);
+    window.addEventListener("resize", initNoButtonPixelPosition);
+
+    // Pointer events cover mouse + touch on modern phones
+    playground.addEventListener("pointermove", (e) => handleMove(e.clientX, e.clientY));
+
+    // Touch fallback for older iOS
+    playground.addEventListener("touchmove", (e) => {
+      if (!e.touches || !e.touches[0]) return;
+      handleMove(e.touches[0].clientX, e.touches[0].clientY);
+    }, { passive: true });
+
+    noBtn.addEventListener("pointerenter", (e) => handleMove(e.clientX, e.clientY));
+
+    yesBtn.addEventListener("click", () => {
+      result.innerHTML = `<span class="sparkle">eeeek! shall we have steak for valentines day? 💖💖💖</span>`;
+      // Stop No button shenanigans after Yes
+      playground.style.pointerEvents = "none";
+      noBtn.disabled = true;
+      noBtn.style.opacity = 0.5;
+      noBtn.style.cursor = "not-allowed";
+    });
+
+    // Mobile taps might hit it—keep it running away
+    noBtn.addEventListener("click", () => {
+      moveNoButtonAwayFrom(Math.random()*playground.clientWidth, Math.random()*playground.clientHeight);
+      result.textContent = "Nice try 😌";
+    });
+  </script>
+</body>
+</html>
