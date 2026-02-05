@@ -72,25 +72,31 @@
       opacity:.85;
     }
 
-    /* 📸 Photos: responsive, wraps cleanly on iPhone */
-    .photos{
-      display:flex;
-      gap:10px;
-      justify-content:center;
-      align-items:center;
-      margin: 6px auto 18px;
-      width:100%;
-      flex-wrap: wrap; /* always allow wrap */
-    }
-    .photos img{
-      width: min(210px, 28vw);
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-      border-radius: 18px;
-      box-shadow: 0 12px 26px rgba(255,77,141,.20);
-      border: 1px solid rgba(255,255,255,.7);
-      display:block;
-    }
+/* 📸 Photos: always one horizontal line */
+.photos{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  align-items:center;
+  margin: 6px auto 18px;
+  width:100%;
+  flex-wrap: nowrap;      /* ✅ force single line */
+  overflow-x: auto;       /* ✅ if screen is too small, allow swipe */
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px;    /* space so scroll bar doesn't touch photos */
+}
+
+.photos img{
+  flex: 0 0 auto;         /* don't allow wrapping behavior */
+  width: clamp(90px, 28vw, 210px);  /* ✅ scales down on iPhone */
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 18px;
+  box-shadow: 0 12px 26px rgba(255,77,141,.20);
+  border: 1px solid rgba(255,255,255,.7);
+  display:block;
+}
+
     @media (max-width: 560px){
       .photos img{
         width: 30vw;       /* 3 across on many phones */
